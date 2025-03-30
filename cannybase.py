@@ -1,3 +1,4 @@
+import numpy as np
 import cv2
 
 
@@ -43,7 +44,7 @@ def get_canny_total(data, low, high):
     Returns the count of how many times each cell was part of a Canny edge.
     i.e. 0 if it wasn't an edge across any axis, 1 if it was an edge along 1 axis, 3 if it was an edge across all 3 axes.
     """
-    data = to_uint8(data)
+    data_int = to_uint8(data)
     canny_x = canny_along_axis(data_int, 0, low, high)
     canny_y = canny_along_axis(data_int, 1, low, high)
     canny_z = canny_along_axis(data_int, 2, low, high)
