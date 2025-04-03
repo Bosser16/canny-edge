@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.ndimage import gaussian_filter
 import cv2
 
 
@@ -52,7 +53,7 @@ def get_canny_total(data, low, high):
     return canny_total
 
 
-def get_edge_data(data, low, high, min_axes):
+def get_edge_data(data, low, high, min_axes, gaussian=0):
     """
     Returns data values from `data` for cells which are part of an edge.
     Other cells are set to `np.nan`.
@@ -60,9 +61,11 @@ def get_edge_data(data, low, high, min_axes):
     `low`: Low threshold value for Canny edge detection.
     `high`: High threshold value for Canny edge detection.
     `min_axes`: Minimum number of axes along which a cell must be part of an edge for it to be counted.
+    `gaussian`: Standard deviation for Gaussian blur.
     Returns the result as described above, with the same shape as `data`.
     """
-    canny_total = get_canny_total(data, low, high)
+    blurred_data = gaussian_filter(data, gaussian)
+    canny_total = get_canny_total(blurred_data, low, high)
     edges = canny_total >= min_axes
     edge_data = np.where(edges, data, np.nan)
     return edge_data
